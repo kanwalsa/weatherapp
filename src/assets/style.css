@@ -1,0 +1,20 @@
+/* src/assets/style.css */
+
+:root {
+  --page-bg-color: #eef2f7;
+  --accent-color: #000080;
+  --font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: var(--page-bg-color);
+  font-family: var(--font-family);
+  color: var(--accent-color);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
