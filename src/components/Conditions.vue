@@ -1,9 +1,9 @@
 <template>
-
   <div v-if="weather" class="weather-conditions">
-
     <div class="condition">
-      <v-icon color="var(--accent-color)" size="28">mdi-clock-time-four-outline</v-icon>
+      <v-icon color="var(--accent-color)" size="28"
+        >mdi-clock-time-four-outline</v-icon
+      >
       <div class="value">{{ requestTime }}</div>
       <div class="label">Retreival Time</div>
     </div>
@@ -15,7 +15,11 @@
     </div>
 
     <div class="condition">
-      <v-icon :icon="weatherCodesStore.getIcon(weather.code)" color="var(--acent-color)" size="28">
+      <v-icon
+        :icon="weatherCodesStore.getIcon(weather.code)"
+        color="var(--acent-color)"
+        size="28"
+      >
       </v-icon>
       <div class="value">{{ weather.description }}</div>
       <div class="label">Conditions</div>
@@ -47,45 +51,48 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useWeatherCodesStore } from '../stores/weatherCodes'
-import { fetchConditions } from '../services/weather'
+import { ref, watch } from "vue";
+import { useWeatherCodesStore } from "../stores/weatherCodes";
+import { fetchConditions } from "../services/weather";
 
-const requestTime = ref<string>('')
-const weatherCodesStore = useWeatherCodesStore()
+const requestTime = ref<string>("");
+const weatherCodesStore = useWeatherCodesStore();
 interface City {
-  name?: string
-  lat: number
-  lon: number
+  name?: string;
+  lat: number;
+  lon: number;
 }
 
 // Accept a City object
-const props = defineProps<{ city: City }>()
+const props = defineProps<{ city: City }>();
 
-const weather = ref<any>(null)
-const loading = ref(false)
-const error = ref('')
+const weather = ref<any>(null);
+const loading = ref(false);
+const error = ref("");
 
 watch(
   () => props.city,
   async (newCity) => {
-    if (!newCity) return
+    if (!newCity) return;
 
-    loading.value = true
-    error.value = ''
-    weather.value = null
+    loading.value = true;
+    error.value = "";
+    weather.value = null;
 
     try {
-      weather.value = await fetchConditions(newCity.lat, newCity.lon)
-      requestTime.value = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      weather.value = await fetchConditions(newCity.lat, newCity.lon);
+      requestTime.value = new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     } catch (err: any) {
-      error.value = err.message || 'Error fetching current conditions'
+      error.value = err.message || "Error fetching current conditions";
     } finally {
-      loading.value = false
+      loading.value = false;
     }
   },
   { immediate: true },
-)
+);
 </script>
 
 <style scoped>

@@ -24,44 +24,47 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useWeatherCodesStore } from '../stores/weatherCodes'
-import { fetchForecast } from '../services/weather'
+import { ref, watch } from "vue";
+import { useWeatherCodesStore } from "../stores/weatherCodes";
+import { fetchForecast } from "../services/weather";
 interface City {
-  name?: string
-  lat: number
-  lon: number
+  name?: string;
+  lat: number;
+  lon: number;
 }
 
 // Accept a City object
-const props = defineProps<{ city: City }>()
-const weatherCodesStore = useWeatherCodesStore()
+const props = defineProps<{ city: City }>();
+const weatherCodesStore = useWeatherCodesStore();
 
-const forecast = ref<{ date: string; max: number; min: number; description: string }[]>([])
-const loading = ref(false)
-const error = ref('')
+const forecast = ref<
+  { date: string; max: number; min: number; description: string }[]
+>([]);
+const loading = ref(false);
+const error = ref("");
 
 watch(
   () => props.city,
   async (newCity) => {
-    if (!newCity) return
-    loading.value = true
-    error.value = ''
-    forecast.value = []
+    if (!newCity) return;
+    loading.value = true;
+    error.value = "";
+    forecast.value = [];
 
     try {
-      forecast.value = await fetchForecast(newCity.lat, newCity.lon)
+      forecast.value = await fetchForecast(newCity.lat, newCity.lon);
     } catch (err: any) {
-      error.value = err.message || 'Error fetching forecast'
+      error.value = err.message || "Error fetching forecast";
     } finally {
-      loading.value = false
+      loading.value = false;
     }
   },
   { immediate: true },
-)
+);
 
 // Helpers
-const formatDay = (date: string) => new Date(date).toLocaleDateString('en-US', { weekday: 'short' })
+const formatDay = (date: string) =>
+  new Date(date).toLocaleDateString("en-US", { weekday: "short" });
 </script>
 
 <style scoped>

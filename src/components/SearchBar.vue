@@ -17,39 +17,39 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { getCities } from '../services/geocode'
-import axios from 'axios'
+import { ref } from "vue";
+import { getCities } from "../services/geocode";
+import axios from "axios";
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
-const suggestions = ref<{ label: string; value: any }[]>([])
-const loading = ref(false)
-const selectedCity = ref(null)
-let searchTimeout: number | undefined
+const suggestions = ref<{ label: string; value: any }[]>([]);
+const loading = ref(false);
+const selectedCity = ref(null);
+let searchTimeout: number | undefined;
 
 async function onSearch(search: string) {
   if (!search || search.length < 2) {
-    suggestions.value = []
-    return
+    suggestions.value = [];
+    return;
   }
-  clearTimeout(searchTimeout) // cancels the previously scheduled fetch if it hasn't fired yet
+  clearTimeout(searchTimeout); // cancels the previously scheduled fetch if it hasn't fired yet
   searchTimeout = window.setTimeout(async () => {
-    loading.value = true
+    loading.value = true;
     try {
-      suggestions.value = await getCities(search)
+      suggestions.value = await getCities(search);
     } catch (err) {
-      console.error('Error fetching suggested cities', err)
-      suggestions.value = []
+      console.error("Error fetching suggested cities", err);
+      suggestions.value = [];
     } finally {
-      loading.value = false
+      loading.value = false;
     }
-  }, 300) // debounce 300ms
+  }, 300); // debounce 300ms
 }
 
 function onSelect(city: any) {
   if (city) {
-    emit('update:modelValue', city) // store full object
+    emit("update:modelValue", city); // store full object
   }
 }
 </script>
