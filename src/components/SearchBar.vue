@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-4" max-width="400">
+  <v-container class="pa-4" max-width="500">
     <v-autocomplete
       v-model="selectedCity"
       :items="suggestions"
